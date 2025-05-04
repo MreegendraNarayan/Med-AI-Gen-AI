@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MedBot - Your AI Medical Assistant</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header-top">
+        <h1>🩺 MedBot</h1>
+        <button class="dark-mode-toggle" id="toggle-theme" title="Toggle Dark Mode">🌙</button>
+      </div>
+      <p>Your AI-powered medical assistant</p>
+    </header>
+
+    <main class="chat-window" id="chat-window">
+      <div class="chat-bubble bot">
+        <img class="avatar" src="{{ url_for('static', filename='medical-robot.png') }}" alt="MedBot Avatar">
+        <div class="text">Hello! 👋 I'm <strong>MedBot</strong>. How can I help you today?</div>
+      </div>
+    </main>
+
+    <form class="chat-form" id="chat-form">
+      <input type="text" id="user-input" name="user-input" placeholder="Type your symptoms or question..." autocomplete="off" required />
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("user-input");
+    const chatWindow = document.getElementById("chat-window");
+    const toggleTheme = document.getElementById("toggle-theme");
+    const htmlEl = document.documentElement;
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const message = input.value.trim();
+      if (!message) return;
+
+      // Add user message to chat
+      const userBubble = document.createElement("div");
+      userBubble.className = "chat-bubble user";
+      userBubble.innerText = message;
+      chatWindow.appendChild(userBubble);
+
+      // Add loading bot message
+      const botBubble = document.createElement("div");
+      botBubble.className = "chat-bubble bot loading";
+      botBubble.innerHTML = `
+        <img class="avatar" src="{{ url_for('static', filename='medical-robot.png') }}" alt="MedBot Avatar">
+        <div class="text">Thinking...</div>
+      `;
+      chatWindow.appendChild(botBubble);
+
+      // Scroll to latest message
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+      input.value = "";
+
+      // Send request to Flask backend
+      const formData = new FormData();
+      formData.append("user-input", message);
+      
+      fetch('/get', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(data => {
+        botBubble.querySelector(".text").innerText = data;
+        botBubble.classList.remove("loading");
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        botBubble.querySelector(".text").innerText = "Sorry, I'm having trouble connecting right now. Please try again later.";
+        botBubble.classList.remove("loading");
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      });
+    });
+
+    // Dark Mode Toggle
+    toggleTheme.addEventListener("click", () => {
+      const current = htmlEl.getAttribute("data-theme");
+      const newTheme = current === "light" ? "dark" : "light";
+      htmlEl.setAttribute("data-theme", newTheme);
+      toggleTheme.textContent = newTheme === "dark" ? "☀️" : "🌙";
+    });
+  </script>
+</body>
+</html>
