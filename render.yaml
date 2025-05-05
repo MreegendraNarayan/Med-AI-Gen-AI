@@ -3,12 +3,15 @@ services:
     name: medical-ai-chatbot
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 120
+    startCommand: >
+      gunicorn wsgi:application
+      --bind 0.0.0.0:$PORT
+      --workers 1
+      --threads 2
+      --timeout 120
+      --log-level debug
     envVars:
       - key: PINECONE_API_KEY
         sync: false
       - key: GOOGLE_API_KEY
         sync: false
-    resources:
-      limits:
-        memory: 512Mi
