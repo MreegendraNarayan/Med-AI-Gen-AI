@@ -10,11 +10,12 @@
     git clone https://github.com/MreegendraNarayan/Med-AI-Gen-AI.git
     ```
 
-2. Create a conda environment
+2. Create a virutal environment
 
     ```bash
-    conda create -n medibot python=3.10 -y
-    conda activate medibot
+    python -m venv venv python=3.10.16 -y
+    .\venv\Scripts\Activate.ps1 # for powershell
+    .\venv\Scripts\activate.bat # for cmd
     ```
 
 3. Install the requirements
