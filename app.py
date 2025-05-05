@@ -1,12 +1,18 @@
 from flask import Flask, render_template, request, jsonify
 from src.helper import download_hugging_face_embeddings
+from src.prompt import *
 from langchain_pinecone import PineconeVectorStore
-from langchain_google_genai import ChatGoogleGenerativeAI
+try:
+    from langchain_google_genai import ChatGoogleGenerativeAI
+except ImportError:
+    print("Installing langchain-google-genai...")
+    import subprocess
+    subprocess.check_call(["pip", "install", "langchain-google-genai==0.0.6"])
+    from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from dotenv import load_dotenv
-from src.prompt import *
 import os
 
 app = Flask(__name__)
