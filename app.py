@@ -79,4 +79,12 @@ def chat():
         return f"I'm sorry, I encountered an error: {str(e)}"
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    # Getting port from environment variable or using 8080 as default
+    port = int(os.environ.get("PORT", 8080))
+    
+    # Running the Flask application
+    app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=False #isse production me bhi debug false set rahega
+    )
