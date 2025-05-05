@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: medical-ai-chatbot
+    name: Med-AI-Gen-AI
     runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: >
