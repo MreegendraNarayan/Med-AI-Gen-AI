@@ -3,9 +3,11 @@ services:
     name: medical-ai-chatbot
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn wsgi:app
+    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT
     envVars:
       - key: PINECONE_API_KEY
         sync: false
       - key: GOOGLE_API_KEY
         sync: false
+      - key: PORT
+        value: 10000
