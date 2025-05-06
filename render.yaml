@@ -1,17 +1,13 @@
 services:
   - type: web
     name: Med-AI-Gen-AI
-    runtime: python
+    env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: >
-      gunicorn wsgi:application
-      --bind 0.0.0.0:$PORT
-      --workers 1
-      --threads 2
-      --timeout 120
-      --log-level debug
+    startCommand: python app.py
     envVars:
       - key: PINECONE_API_KEY
         sync: false
       - key: GOOGLE_API_KEY
         sync: false
+    healthCheckPath: /health
+    runtime: python3
