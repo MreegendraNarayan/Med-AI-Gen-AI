@@ -13,3 +13,4 @@ torch
 google-generativeai
 huggingface-hub[hf_xet]
 waitress
+gunicorn

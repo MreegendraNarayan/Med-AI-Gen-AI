@@ -89,12 +89,9 @@ def handle_error(error):
     return jsonify({"error": str(error)}), 500
 
 if __name__ == '__main__':
-    # Get port from environment variable (Render sets this)
     port = int(os.environ.get("PORT", 8080))
-    
-    # In development, you might want debug=True
+
     if os.environ.get("FLASK_ENV") == "development":
         app.run(host="0.0.0.0", port=port, debug=True)
     else:
-        # Production mode
         app.run(host="0.0.0.0", port=port, debug=False)
