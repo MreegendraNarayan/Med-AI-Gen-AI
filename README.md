@@ -23,3 +23,9 @@
     ```bash
     pip install -r requirements.txt
     ```
+
+4. Link of this project to run it live
+
+   ```bash
+   **https://med-ai-gen-ai.onrender.com**
+   ```
